@@ -1,0 +1,8 @@
+{
+“name”: “HuefelBot”,
+“version”: “1.0.0”,
+“description”: “”,
+“main”: “bot.py”,
+“author”: “Nishant Balaji”,
+“dependencies”: {}
+}
