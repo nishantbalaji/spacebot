@@ -4,7 +4,6 @@ from discord.ext import commands
 from dotenv import load_dotenv
 import random
 import http.client
-import pandas
 from nasapy.api import *
 
 load_dotenv()
@@ -15,7 +14,7 @@ conn = http.client.HTTPSConnection("api.nasa.gov")
 
 nasa = Nasa()
 
-bot = commands.Bot(command_prefix='!')
+bot = commands.Bot(command_prefix='!', case_insensitive = True)
 
 @bot.event
 async def on_ready():
@@ -43,12 +42,20 @@ async def echo(ctx, *args):
 # Get the picture of the day from NASA API
 @bot.command(name='apod')
 async def apod(ctx, *args):
-    apod = nasa.picture_of_the_day(hd = True)
-
+    if not args:
+        apod = nasa.picture_of_the_day(hd=True)
+    else:
+        date = str(args)
+        try:
+            apod = nasa.picture_of_the_day(date, hd=True)
+        except:
+            await ctx.send('Not a valid input, date must be in `YYYY-MM-DD`')
+            return 0
     await ctx.send('Title: ' + apod['title'] + '\n' + 'Author: ' + apod['copyright'] + '\n' + 'Date: ' + apod['date'])
     await ctx.send(apod['hdurl'])
     await ctx.send('>>> ' + '*' + apod['explanation'] + '*')
 
+#@bot.command(name='')
 #@bot.command(name='help')
 #async def help(ctx):
 
