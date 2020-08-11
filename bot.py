@@ -15,6 +15,8 @@ conn = http.client.HTTPSConnection("api.nasa.gov")
 nasa = Nasa()
 
 bot = commands.Bot(command_prefix='!', case_insensitive = True)
+print(nasa.limit_remaining)
+
 
 @bot.event
 async def on_ready():
@@ -40,21 +42,32 @@ async def echo(ctx, *args):
         await ctx.send(output)
 
 # Get the picture of the day from NASA API
-@bot.command(name='apod')
+@bot.command(name='apod', help='Responds with NASA\'s picture of the day. Put the date after the command to specify a specific date. ')
 async def apod(ctx, *args):
     if not args:
         apod = nasa.picture_of_the_day(hd=True)
+        print('evaluating')
     else:
         date = str(args)
         try:
-            apod = nasa.picture_of_the_day(date, hd=True)
+            apod = nasa.picture_of_the_day('2019-10-05', hd=True)
+            print('im here')
         except:
-            await ctx.send('Not a valid input, date must be in `YYYY-MM-DD`')
+            await ctx.send('Not a valid input, date must be in `YYYY MM DD`')
             return 0
-    await ctx.send('Title: ' + apod['title'] + '\n' + 'Author: ' + apod['copyright'] + '\n' + 'Date: ' + apod['date'])
+            print()
+
+    if 'copyright' in apod:
+        await ctx.send('Title: ' + apod['title'] + '\n' + 'Author: ' + apod['copyright'] + '\n' + 'Date: ' + apod['date'])
+    else:
+        await ctx.send('Title: ' + apod['title'] + '\n' + 'Date: ' + apod['date'])
     await ctx.send(apod['hdurl'])
     await ctx.send('>>> ' + '*' + apod['explanation'] + '*')
 
+
+@bot.command()
+async def catchAll(ctx):
+    await ctx.send('I didn\'t recognize that command.')
 #@bot.command(name='')
 #@bot.command(name='help')
 #async def help(ctx):
