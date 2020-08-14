@@ -10,7 +10,6 @@ load_dotenv()
 KEY = os.getenv('API_KEY')
 TOKEN = os.getenv('DISCORD_TOKEN')
 NASA_KEY = os.getenv('NASA_KEY')
-#conn = http.client.HTTPSConnection("api.nasa.gov")
 
 nasa = Nasa(key = NASA_KEY)
 bot = commands.Bot(command_prefix='!', case_insensitive = True)
@@ -43,10 +42,8 @@ async def echo(ctx, *args):
 
 @bot.command(name='apod', help='Responds with NASA\'s picture of the day. Put the date after the command as `YYYY MM DD` to specify a date.')
 async def apod(ctx, *args):
-    pic = ''
     if not args:
         pic = nasa.picture_of_the_day(hd = True)
-        print('evaluating')
     else:
         date = []
         for words in args:
@@ -70,10 +67,12 @@ async def apod(ctx, *args):
     await ctx.send(pic['hdurl'])
     await ctx.send('>>> ' + '*' + pic['explanation'] + '*')
 
-"""@bot.command(name = 'epic')
+@bot.command(name = 'epic')
 async def epicImg(ctx):
-    e = nasa.epic(date='2019-01-01')
-    await ctx.send(e[3])"""
+    e = nasa.epic()
+
+    s = e[3]
+    await ctx.send(s)
 
 
 #@bot.command(name='')
