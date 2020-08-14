@@ -69,7 +69,7 @@ async def apod(ctx, *args):
 
 @bot.command(name = 'epic')
 async def epicImg(ctx):
-    e = nasa.epic(date=None)
+    e = nasa.epic(date='2020-08-11')
 
     s = e[3]
     await ctx.send('https://epic.gsfc.nasa.gov/archive/natural/' '2020/' + '08/' + '11/png/'+ str(s['image']) + '.png')
