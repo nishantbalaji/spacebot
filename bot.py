@@ -10,12 +10,11 @@ load_dotenv()
 KEY = os.getenv('API_KEY')
 TOKEN = os.getenv('DISCORD_TOKEN')
 NASA_KEY = os.getenv('NASA_KEY')
-conn = http.client.HTTPSConnection("api.nasa.gov")
+#conn = http.client.HTTPSConnection("api.nasa.gov")
 
 nasa = Nasa()
-
 bot = commands.Bot(command_prefix='!', case_insensitive = True)
-print(nasa.limit_remaining)
+#print(nasa.limit_remaining)
 
 
 @bot.event
@@ -41,33 +40,43 @@ async def echo(ctx, *args):
         await ctx.message.delete()
         await ctx.send(output)
 
-# Get the picture of the day from NASA API
-@bot.command(name='apod', help='Responds with NASA\'s picture of the day. Put the date after the command to specify a specific date. ')
+
+@bot.command(name='apod')
 async def apod(ctx, *args):
     if not args:
-        apod = nasa.picture_of_the_day(hd=True)
+        pic = nasa.picture_of_the_day(hd=True)
         print('evaluating')
     else:
-        date = str(args)
-        try:
-            apod = nasa.picture_of_the_day('2019-10-05', hd=True)
-            print('im here')
-        except:
-            await ctx.send('Not a valid input, date must be in `YYYY MM DD`')
+        date = []
+        for words in args:
+            date.append(words)
+        if len(date) == 3:
+            year = date[0]
+            month = date[1]
+            day = date[2]
+            try:
+                pic = nasa.picture_of_the_day(year + '-' + month + '-' + day, hd=True)
+            except:
+                await ctx.send("Invalid Request.")
+        else:
+            await ctx.send('Not a valid input, date must be in `YYYY MM DD` and must be a previous date.')
             return 0
-            print()
 
-    if 'copyright' in apod:
-        await ctx.send('Title: ' + apod['title'] + '\n' + 'Author: ' + apod['copyright'] + '\n' + 'Date: ' + apod['date'])
+    if 'copyright' in pic:
+        await ctx.send('Title: ' + pic['title'] + '\n' + 'Author: ' + pic['copyright'] + '\n' + 'Date: ' + pic['date'])
     else:
-        await ctx.send('Title: ' + apod['title'] + '\n' + 'Date: ' + apod['date'])
-    await ctx.send(apod['hdurl'])
-    await ctx.send('>>> ' + '*' + apod['explanation'] + '*')
+        await ctx.send('Title: ' + pic['title'] + '\n' + 'Date: ' + pic['date'])
+    await ctx.send(pic['hdurl'])
+    await ctx.send('>>> ' + '*' + pic['explanation'] + '*')
 
+@bot.command(name = 'epic')
+async def epicImg(ctx):
+    e = nasa.epic(date='2019-01-01')
+    await ctx.send(e[3])
 
-@bot.command()
+"""@bot.command()
 async def catchAll(ctx):
-    await ctx.send('I didn\'t recognize that command.')
+    await ctx.send('I didn\'t recognize that command.')"""
 #@bot.command(name='')
 #@bot.command(name='help')
 #async def help(ctx):
