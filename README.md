@@ -24,3 +24,5 @@ This is a simple Discord bot created to implement NASA data into Discord. Using 
    - `!echo [text]` - returns back the text sent to it, and deletes the message containing the command.
   
   *\*This command is optional*
+  
+  More features are being implemented.
