@@ -20,4 +20,4 @@ This is a simple Discord bot created to implement NASA data into Discord. Using 
   
   ## Commands
    - `!apod [YYYY MM DD]` - displays the astronomy picture of the date specified, or current date if no date is specified, with associated its associated author and caption.
-   - `!echo [text] - returns back the text sent to it, and deletes the message containing the command.
+   - `!echo [text]` - returns back the text sent to it, and deletes the message containing the command.
