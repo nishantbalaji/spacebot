@@ -1,3 +1,5 @@
 discord.py
 discord
 nasapy
+dotenv
+random
